@@ -1,0 +1,30 @@
+&pinctrl {
+	pmic_i2c_default: pmic_i2c_default {
+		group1 {
+			/* change here to match your HW */
+			psels = <NRF_PSEL(TWIM_SDA, 1, 11)>,
+				<NRF_PSEL(TWIM_SCL, 1, 12)>;
+			bias-pull-up;
+		};
+	};
+
+	pmic_i2c_sleep: pmic_i2c_sleep {
+		group1 {
+			/* change here to match your HW */
+			psels = <NRF_PSEL(TWIM_SDA, 1, 11)>,
+				<NRF_PSEL(TWIM_SCL, 1, 12)>;
+			low-power-enable;
+		};
+	};
+};
+
+/*
+ * change to the appropriate &i2c* instance if needed
+ * (note that I2C instances might be tied to certain GPIO ports)
+ */
+pmic_i2c: &i2c21 {
+	status = "okay";
+	pinctrl-0 = <&pmic_i2c_default>;
+	pinctrl-1 = <&pmic_i2c_sleep>;
+	pinctrl-names = "default", "sleep";
+};
