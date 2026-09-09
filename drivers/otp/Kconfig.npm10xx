@@ -1,0 +1,34 @@
+# Copyright (c) 2026 Nordic Semiconductor ASA
+# SPDX-License-Identifier: Apache-2.0
+
+config OTP_NPM10XX
+	bool "Nordic nPM10xx UICR (User OTP) driver"
+	default y
+	depends on DT_HAS_NORDIC_NPM10XX_UICR_ENABLED && DT_HAS_NORDIC_NPM10XX_ENABLED
+	select MFD
+	select I2C
+	help
+	  Enable the Nordic nPM10xx UICR (User one-time-programmable
+	  configuration registers) driver. UICR is exposed through the OTP
+	  driver API as a packed bit-array: bit N of the array maps to UICR bit
+	  address N. Programming requires CONFIG_OTP_PROGRAM and is irreversible.
+
+if OTP_NPM10XX
+
+config OTP_NPM10XX_INIT_PRIORITY
+	int "nPM10xx UICR driver initialization priority"
+	default 85
+	help
+	  Initialization priority for the nPM10xx UICR driver. It must be
+	  greater than the MFD init priority.
+
+config OTP_NPM10XX_DRY_RUN
+	bool "nPM10xx UICR dry-run programming"
+	depends on OTP_PROGRAM
+	help
+	  Do not actually burn UICR bits. The programming sequence is executed
+	  up to (but excluding) the TASKS.PROG trigger and the intended bit
+	  address is logged instead. Useful for safe bring-up, as UICR
+	  programming is irreversible.
+
+endif # OTP_NPM10XX

@@ -1,0 +1,33 @@
+# Copyright (c) 2026 Nordic Semiconductor ASA
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+  Nordic nPM10xx UICR (User one-time-programmable configuration registers).
+
+  UICR is the User OTP memory of the nPM10xx PMIC. It holds non-volatile bits
+  that set the reset/default values for regulator startup, SYSREG input current
+  limit, battery charger configuration, BUCK/LDO output voltage, boot monitor,
+  GPIO input buffers and reset/ship-hold configuration.
+
+  This node is a child of the nordic,npm10xx MFD node and is accessed through
+  the Zephyr OTP driver API. The memory is exposed as a packed bit-array: UICR
+  bit address N is bit (N % 8) of byte (N / 8). Named field bit offsets and
+  widths are provided in
+  <zephyr/dt-bindings/otp/nordic-npm10xx-uicr.h>.
+
+compatible: "nordic,npm10xx-uicr"
+
+include: base.yaml
+
+examples:
+  - |
+    #include <zephyr/dt-bindings/otp/nordic-npm10xx-uicr.h>
+
+    pmic@6a {
+      reg = <0x6a>;
+      compatible = "nordic,npm10xx";
+
+      uicr {
+        compatible = "nordic,npm10xx-uicr";
+      };
+    };
